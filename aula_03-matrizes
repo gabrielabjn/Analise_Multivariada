@@ -1,0 +1,67 @@
+'''
+Analise Multivariada
+19/03/2024
+Matrizes - continuacao
+
+'''
+
+A<- matrix(data=c(1,-2,3,2,4,-1), ncol = 3, byrow = T)
+b<-c(7,-3,6)
+c<-c(5,8,4)
+d<-c(2,9)
+
+r1<-A%*%b
+is.matrix(r1)
+
+A%*%t(A)
+t(A)%*%(A)
+
+autovetores<-eigen(A%*%t(A)) # as colunas sao os dois autovetores
+autovetores
+
+autovetores$values
+
+l1<-autovetores$vectors[,1]
+l2<-autovetores$vectors[,2]
+
+t(l1)%*%l2
+t(l1)%*%l1
+
+det(A%*%t(A))
+
+lambda<-autovetores$values
+prod(lambda) # mesma coisa
+
+# o det de uma matriz quadrada qualquer eh o produto dos autovalores dessa matriz.
+
+# TRACO DE MATRIZ QUADRADA
+
+sum(diag(A%*%t(A)))
+sum(lambda)
+
+autovetores$vectors[,1]*t(autovetores$vectors[,1])
+l1%*%t(l1)
+
+autovetores$vectors[,2]*t(autovetores$vectors[,2])
+l2%*%t(l2)
+
+autovetores$values
+27.16 * l1%*%t(l1) + 7.84 * l2%*%t(l2) # tem que dar proxima de S1
+
+S1.inv<-solve(A%*%t(A))
+S1.inv
+
+1/27 * l1%*%t(l1) + 1/7.84 * l2%*%t(l2)
+
+A_squared<-(A%*%t(A))
+A_cubo<-A_squared%*%A
+A_4<-A_cubo%*%A
+
+P<-autovetores$vectors
+L<-diag(lambda)
+P%*%L%*%t(P)
+P%*%(1/L)%*%t(P)
+P%*%diag(1/lambda)%*%t(P)
+
+L^4
+L**4
