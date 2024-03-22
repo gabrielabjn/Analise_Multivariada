@@ -16,20 +16,20 @@ is.matrix(r1)
 A%*%t(A)
 t(A)%*%(A)
 
-autovetores<-eigen(A%*%t(A)) # as colunas sao os dois autovetores
-autovetores
+A.de<-eigen(A%*%t(A)) # as colunas sao os dois autovetores
+A.de
 
-autovetores$values
+A.de$values
 
-l1<-autovetores$vectors[,1]
-l2<-autovetores$vectors[,2]
+l1<-A.de$vectors[,1]
+l2<-A.de$vectors[,2]
 
 t(l1)%*%l2
 t(l1)%*%l1
 
 det(A%*%t(A))
 
-lambda<-autovetores$values
+lambda<-A.de$values
 prod(lambda) # mesma coisa
 
 # o det de uma matriz quadrada qualquer eh o produto dos autovalores dessa matriz.
@@ -39,13 +39,13 @@ prod(lambda) # mesma coisa
 sum(diag(A%*%t(A)))
 sum(lambda)
 
-autovetores$vectors[,1]*t(autovetores$vectors[,1])
+A.de$vectors[,1]*t(A.de$vectors[,1])
 l1%*%t(l1)
 
-autovetores$vectors[,2]*t(autovetores$vectors[,2])
+A.de$vectors[,2]*t(A.de$vectors[,2])
 l2%*%t(l2)
 
-autovetores$values
+A.de$values
 27.16 * l1%*%t(l1) + 7.84 * l2%*%t(l2) # tem que dar proxima de S1
 
 S1.inv<-solve(A%*%t(A))
@@ -57,7 +57,7 @@ A_squared<-(A%*%t(A))
 A_cubo<-A_squared%*%A
 A_4<-A_cubo%*%A
 
-P<-autovetores$vectors
+P<-A.de$vectors
 L<-diag(lambda)
 P%*%L%*%t(P)
 P%*%(1/L)%*%t(P)
@@ -65,3 +65,4 @@ P%*%diag(1/lambda)%*%t(P)
 
 L^4
 L**4
+
