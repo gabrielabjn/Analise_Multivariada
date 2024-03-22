@@ -66,3 +66,23 @@ P%*%diag(1/lambda)%*%t(P)
 L^4
 L**4
 
+# 22/03/24 ---------------------------------------------------------------------------------------------
+
+sigma<-cov(iris[-5])
+sigma.inv<-solve(sigma)
+
+iris[1,]
+
+apply(iris[-5],2,mean)
+
+scale(iris[,1], center = TRUE, scale = F)
+iris.center<-apply(iris[-5], 2, FUN = scale, center = T, scale = F)
+iris.center[1,]%*%sigma.inv%*%(iris.center[1,])
+# calcular para todos os 150 valores (150 distancias quadraticas), 
+#usando a matriz iris.center. Ordenar as 150 distâcias e colocar em um grafico,
+# no eixo y, as distancias ao quadrado e no eixo x, as observacoes ordenadas.
+# Fazer pro iris e pro faithful. 
+
+# vaos fazer um qq plot com uma chi-squared, o professor vai colocar os graus de 
+#liberdade. 
+
