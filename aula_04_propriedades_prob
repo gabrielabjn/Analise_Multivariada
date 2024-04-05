@@ -1,0 +1,33 @@
+####
+# Estatistica Mutivariada
+####
+
+sigma_G<-matrix(c(4,1,2,1,9,-3,2,-3,25), nrow = 3, byrow=TRUE)
+sigma_G
+
+v.meio<-diag(sqrt(diag(sigma_G))) # pega diag de siga, calcula sqrt (sd), e constroi matriz diagonal com esses valores
+v.meio
+
+v.meio.inv<-diag(1/sqrt(diag(sigma_G)))
+v.meio.inv
+
+Ro<-v.meio.inv%*%sigma_G
+
+# repetir o processo pra matriz abaixo
+
+Sigma.iris<-cov(iris[-5])
+Sigma.iris
+
+v.meio.iris<-diag(sqrt(diag(Sigma.iris))) # pega diag de siga, calcula sqrt (sd), e constroi matriz diagonal com esses valores
+v.meio.iris
+
+v.meio.inv.iris<-diag(1/sqrt(diag(Sigma.iris)))
+v.meio.inv.iris
+
+Ro.iris<-v.meio.inv.iris%*%Sigma.iris
+Ro.iris
+
+#traco de Sigma.iris
+sum(diag(Sigma.iris))
+det(Sigma.iris)
+
