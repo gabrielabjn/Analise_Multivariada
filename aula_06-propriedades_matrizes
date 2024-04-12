@@ -1,0 +1,52 @@
+######
+# Análise Multivariada
+# Sexta, 12 de abril de 2024
+######
+
+iris.mat = as.matrix(iris[,-5])
+S = cov(iris.mat)
+D.meio = diag(sqrt(diag(S)))
+D.meio
+
+D.meio.inv = solve(D.meio) 
+R.exp = D.meio.inv%*%S%*%D.meio.inv
+R.exp
+
+R = cor(iris.mat)
+R # tem q dar a mesma coisa que R.exp
+
+R = cor(iris.mat)
+sum((R.exp - R)^2)
+
+# autovetores
+
+plot(iris[,1], col = c('red', 'blue', 'pink')[as.numeric(iris[,5])], pch = 19)
+
+plot(iris[,3], col = c('red', 'blue', 'pink')[as.numeric(iris[,5])], pch = 19)
+
+R.auto = eigen(R)
+R.auto$values
+sum(R.auto$values)
+
+sum(R.auto$values/4) # tem q dar 100%
+
+S.auto = eigen(S)
+Var.total = sum(diag(S))
+S.auto$values
+
+S.cp = S.auto$vectors
+iris.cps<-iris.mat%*%S.cp
+
+R.cp = R.auto$vectors
+iris.pad = scale(iris.mat)
+iris.cpR = iris
+
+par(mfrow = c(2,2))
+
+plot(iris.cps[,1], iris.cps[,2], col = c('red', 'blue', 'pink')[as.numeric(iris$Species)],
+     pch = 19)
+plot(iris.cpR[,1], iris.cpR[,2], col = c('red', 'blue', 'pink')[as.numeric(iris$Species)],
+     pch = 19)
+
+apply(R.cp^2,1,sum) # para cada linha, soma os elementos
+apply(S.cp^2,2,sum) # para cada coluna, soma os elementos 
