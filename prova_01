@@ -46,7 +46,7 @@ c<-as.matrix(c) # prefiro fazer assim
 
 t(b)%*%S%*%b
 
-# analogamente, a variancia amostral de b'X eh dada por c'S c
+# analogamente, a variancia amostral de c'X eh dada por c'S c
 
 t(c)%*%S%*%c
 
