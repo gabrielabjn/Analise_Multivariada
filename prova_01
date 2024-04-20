@@ -1,0 +1,56 @@
+
+# Questao Prova 01 Estatistica Multivariada
+
+# C
+
+# MATRIZES 
+
+# Considere uma amostra de uma populacao 4-variada, com matriz de dados X,
+# cuja matriz de covariancias amostrais nao viciada S apresenta saida abaixo.
+
+S<- matrix(data = c(3.8778,2.8110,3.1480,3.5062,2.8110,2.1210,2.2669,2.5690,
+                    3.1480,2.2669,2.6550,2.8341,3.5062,
+                    2.5690,2.8341,3.2352),nrow = 4, byrow = FALSE, )
+
+# autovalores e autovetores de S
+eigen(S)
+
+# variancia total
+sum(diag(S))
+
+# variancia generalizada
+det(S)
+
+# converter S na matriz de correlacoes correspondente
+
+# matriz de  desvio padrao
+D<-diag(sqrt(diag(S)))
+
+# matriz de correlacoes (resultado visto em aula e no livro)
+R<-solve(D)%*%S%*%solve(D) 
+R
+
+# conferir
+all.equal(D%*%R%*%D , S)
+
+
+# VETORES
+
+c<-c(0.5745,0.4200,0.4693,0.5228)
+b<-c(0,0.5,0.8,0.35)
+
+b<-as.matrix(b) # prefiro fazer assim
+c<-as.matrix(c) # prefiro fazer assim
+
+# a variancia amostral de b'X eh dada por b'S b
+
+t(b)%*%S%*%b
+
+# analogamente, a variancia amostral de b'X eh dada por c'S c
+
+t(c)%*%S%*%c
+
+
+# a covariancia amostral entre b'X e c'X eh dada por b'S c
+
+t(b)%*%S%*%c
