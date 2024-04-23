@@ -1,0 +1,90 @@
+##########
+# Análise Multivariada
+# 23 abr 2024
+##########
+
+S<-cov(iris[-5])
+iris.av<-eigen(S)
+# SCREE PLOT
+plot(iris.av$values, type='b', pch = 21, bg = 'black')
+var.total<-sum(diag(S))
+
+total.perc<-iris.av$values/var.total*100
+
+# total acumulado
+cumsum(total.perc)
+
+# matrizes de autovalores e autovetores de Iris[-5]
+E<-iris.av$vectors
+Lambda<-diag(iris.av$values)
+
+E**2 * 100
+sum((E**2 * 100)[1,])
+
+Lambda
+
+cor.yx<-diag(1/sqrt(diag(S))) # (V^(1/2))⁻1
+# inverso da matriz de desvio-padrao
+
+E%*% sqrt(Lambda)
+
+# Escores dos Componentes
+# X : matriz de dados
+X<-as.matrix(iris[-5])
+
+#Y: matriz de escores
+Y<- X%*%E
+
+apply(iris[-5],2,mean)
+
+Y<-X%*%E
+apply(Y,2,mean)
+apply(Y,2,var)
+
+
+plot(Y[,1:2], pch = 19, col = c("red","blue","pink3")[as.numeric(iris$Species)])
+
+Y.centrado<-apply(Y,2,FUN = function(x) scale(x,center = T, scale = F))     
+Y.centrado
+
+plot(Y.centrado[,1:2], pch = 19, col = c("red","blue","pink3")[as.numeric(iris$Species)])
+hist(Y.centrado[,1], col = 'lightblue')
+
+Srec<-E%*%Lambda%*%t(E) # matriz de covariancias
+Srec
+
+# residuos da recuperacao
+sum((Srec-S)**2)
+
+E.1<-E[,1]
+Lambda.1<-Lambda[1,1]
+
+S.1<-Lambda.1*E.1%*%t(E.1)
+sum((S.1-S)**2)
+
+sum((diag(S.1)-diag(S))**2)
+
+E.2<-E[,1:2]
+Lambda.2<-Lambda[1:2,1:2]
+S.2<-E.2%*%Lambda.2%*%t(E.2)
+sum((diag(S.2)-diag(S))**2)
+
+L<- E%*%sqrt(Lambda)
+L  
+
+L**2
+L**2*100
+apply(L**2,2,sum) # soma elementos de cada coluna
+apply(L**2,1,sum)
+
+#Var(X)
+diag(S) # perceba que batem com os valores do apply acima
+
+# especificidade: qtd da variancia que nao esta sendo explicada por nenhuma
+# das 4 componentes utilizadas
+
+L<-E[,1:2]%*%sqrt(Lambda[1:2,1:2])
+L
+
+S_<-L%*%t(L)
+S_
