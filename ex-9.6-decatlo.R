@@ -75,6 +75,29 @@ L.af**2 # valores que nao aparecem nao sao significativos
 # matriz ortogonal - inversa coincide com a transposta
 
 
+# 17 de maio -------------------------------------------------------
+
+L.star<-varimax(L,eps=1e-5)
+L.star
+
+0.664^2/0.71
+0.429^2/0.71
+
+L.star$loadings%*%t(L.star$loadings)
+colSums(L.star$loadings)
+
+R<-as.matrix(R)
+L.mv.rot<-factanal(covmat=R, factors=4, rotation = 'varimax')
+L.mv.rot
+
+colSums(L.mv.rot$loadings)
+
+par(mfrow=c(2,2))
+plot(L.mv.rot$loadings[,1],L.mv.rot$loadings[,2], type = 'n')
+text(L.mv.rot$loadings[,1],L.mv.rot$loadings[,2], label = paste0('X', 1:10), cex  = 0.75)
+plot(L.mv.rot$loadings[,1],L.mv.rot$loadings[,3], type = 'n')
+text(L.mv.rot$loadings[,1],L.mv.rot$loadings[,3], label = paste0('X', 1:10), cex  = 0.75)
+
 
 
 
