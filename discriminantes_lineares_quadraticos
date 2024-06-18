@@ -1,0 +1,97 @@
+# REVISAO
+# 18 JUN 2024
+
+# DISCRIMINANTE LINEAR
+# SIGMA1 = SIGMA2 = ... = SIGMAY
+
+# USE LDA() OU PACOTE MASS::lda()
+
+# DISCRIMINANTE QUADRATICA
+# SIGMA1 != SIGMA2 != ... != SIGMAY
+
+# USE QDA() OU MASS::qda()
+
+# ------------------------------------------------------------------------------
+
+# A AULA DE HJ EH PRATICA
+# VAMOS TRABALHAR COM UM CONJUNTO DE DADOS COM INFOS DE VINHOS (BOM DMS)
+
+vinho<-read.table('/home/ice/Downloads/wine.dat') # leitura do conj de dados
+variaveis<-c('class', 'Alcohol', 'Malic', 'Ash', 'Alcal', 'Mg', 'Phenol', 'Flav',
+             'Neuf', 'Pivau', 'Color', 'Hue', 'ABs', 'Prolive')
+colnames(vinho)<-variaveis
+grupo<-as.factor(vinho[,1])
+
+cores<-c("#E69F00", "#56B4E9", "#009E73" )
+
+vinho.cp<-princomp(vinho[-1], cor = T)
+plot(vinho.cp$scores[,1:2], pch = 19, xaxt='n', yaxt='n', col=cores[grupo])
+vinho.cp$scores
+
+sum(vinho.cp$sdev[1:2]*12)/13*100
+
+# DIVISAO (60/40)
+set.seed(666)
+divide<-sample(c(TRUE,FALSE),nrow(vinho),replace=T, prob = c(0.6,0.4))
+# 60% de prob de participar do conjunto treinamento e 40% de prob de participar
+#do conjunto teste
+
+treinamento<-vinho[divide,]
+nrow(treinamento)
+teste<-vinho[!divide,]
+nrow(teste)
+
+# ------------------------------------------------------------------------------
+vetor_teste<-table(teste$class)
+soma_total_teste<-sum(vetor_teste)
+porcentagens_teste <- (vetor_teste / soma_total_teste) * 100
+
+vetor_treinamento<-table(treinamento$class)
+soma_total_treinamento<-sum(vetor_treinamento)
+porcentagens_treinamento <- (vetor_treinamento / soma_total_treinamento) * 100
+
+# montar tabela com os valores acima 
+
+# ------------------------------------------------------------------------------
+
+vinho.ld<-MASS::lda(class~.,data=treinamento)
+
+vinho.ld$prior # probabilidades à priori batem com as porcentagens calculadas acima
+# (acho que para o treinamento)
+
+vinho.ld$prior # probs a priori
+vinho.ld$means # centroide de cada grupo
+
+vinho.ld$svd*12/sum(vinho.ld$svd*12)
+
+# proporcao do traco (69% - LD1- da variavel esta no primeiro discriminante)
+#(31% - LD2 - esta no segundo discriminante)
+
+plot(vinho.ld,dimen = 1, type = 'b')
+plot(vinho.ld, col = cores[as.factor((treinamento$class))], , pch=19)
+
+#install.packages('klaR')
+library(klaR)
+classe<-as.factor(treinamento$class)
+klaR:: partimat(classe~Ash+Flav+Neuf+Hue+ABs, data=treinamento, method='lda')
+
+predito<-predict(vinho.ld,teste[-1])
+grupoPredito<-predito$class
+grupoObs<-teste$class
+
+confusao<-table(grupoObs, grupoPredito)
+
+(sum(diag(confusao)))/73 # acuracia
+predito$posterior
+str(predito$posterior)
+
+matriz<-cbind(grupoPredito,predito$posterior)
+str(matriz)
+matriz[58,]
+
+pred.3<-predito$class==3
+
+par(mfrow=c(2,1))
+hist(predito$posterior[pred.3], freq=F) # classe 3
+hist(predito$posterior, freq=F) # todas as classes
+
