@@ -1,0 +1,58 @@
+hemofilia <- read.table("C:/ufjf/Multivariada/T11-8.DAT", quote="\"", comment.char="")
+View(T11.8)
+
+colnames(hemofilia)<-c("grupo", "atividade", "antigeno")
+
+centroides<-aggregate(.~grupo, data = hemofilia, mean)
+t(centroides)
+
+# Matrizes de covariancias amostrais de cada grupo
+cov.lista<-lapply(unique(hemofilia$grupo), FUN=function(x)cov(hemofilia[hemofilia$grupo==x, -1]))
+
+Sigma1<-cov.lista[[1]]
+Sigma2<-cov.lista[[2]]
+
+n1<-30
+n2<-45
+
+Sigma.pol<-((n1-1)*Sigma1 + (n2-1)*Sigma2 ) / (n1+n2-2)
+
+
+# Funcao discriminate de Fisher
+
+ajuste.ld<-MASS::lda(grupo~., data=hemofilia)
+
+ajuste.ld$scaling # b linha
+
+str(ajuste.ld)
+
+# centroides
+ajuste.ld$means
+
+# Valor singular
+ajuste.ld$svd
+
+# Predicao errada, os dados que ajustaram estao sendo utilizados para prever
+
+preditores<-hemofilia[,c(2,3)]
+predicao<-predict(ajuste.ld, newdata = preditores)
+
+grupoPredito<-predicao$class
+compara<-cbind(obs=hemofilia$grupo, predito=grupoPredito)
+
+confusao<-table(compara[,1], compara[,2])
+
+# grafico dos grupos classificados
+plot(ajuste.ld, dimen = 1, type="both")
+
+# Classificação de novos dados
+
+pedicao<-predict(ajuste.ld, newdata = data.frame(atividade=-0.210,antigeno=-0.044))
+pedicao$class
+
+# Vetor b linha
+ajuste.ld$scaling
+
+# Grafico
+
+klaR::partimat(as.factor(grupo)~., data=hemofilia, method="lda", main="Graficos de particao")
